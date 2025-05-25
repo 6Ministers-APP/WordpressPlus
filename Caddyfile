@@ -2,5 +2,5 @@ https://subdomain.your-domain.com:443 {
     root * /srv
     php_fastcgi unix//run/php/php8.1-fpm.sock
     file_server
-encode zstd gzip
+    encode zstd gzip
 }
