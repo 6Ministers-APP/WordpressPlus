@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  # MariaDB — база данных для WordPress
+  db:
+    image: mariadb:10.11
+    container_name: wp-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: your_root_password
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+    volumes:
+      - db_data:/var/lib/mysql
+    command: '--innodb-use-native-aio=1'
+
+  # WordPress + PHP-FPM
+  wordpress:
+    image: wordpress:php8.1-fpm
+    container_name: wp-app
+    restart: unless-stopped
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DEBUG: "true"
+    volumes:
+      - wp_data:/var/www/html
+    depends_on:
+      - db
+
+  # Caddy — веб-сервер с авто-SSL
+  caddy:
+    image: caddy:2-alpine
+    container_name: wp-caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - wp_data:/srv
+      - ./Caddyfile:/etc/caddy/Caddyfile
+    depends_on:
+      - wordpress
+
+  # Redis — кэширование объектов WordPress
+  redis:
+    image: redis:alpine
+    container_name: wp-redis
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379"
+
+volumes:
+  db_data:
+  wp_data:
+  redis_data:
