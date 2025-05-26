@@ -40,8 +40,6 @@ services:
 
   nginx:
     image: nginx:latest
-    ports:
-      - "80:80"
     volumes:
       - wordpress-files:/usr/share/nginx/html
     depends_on:
