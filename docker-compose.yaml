@@ -7,7 +7,7 @@ services:
   wordpress:
     image: wordpress:latest
     volumes:
-      - wordpress-files:/var/www/html
+      - ./wordpress-files:/var/www/html
     environment:
       - SERVICE_FQDN_WORDPRESS
       - WORDPRESS_DB_HOST=mariadb
@@ -25,7 +25,7 @@ services:
   mariadb:
     image: mariadb:11
     volumes:
-      - mariadb-data:/var/lib/mysql
+      - ./mariadb-data:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=$SERVICE_PASSWORD_ROOT
       - MYSQL_DATABASE=wordpress
@@ -42,7 +42,7 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - redis-data:/data
+      - ./redis-data:/data
     command: ["redis-server", "--appendonly yes"]
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
