@@ -5,7 +5,7 @@
 
 services:
   wordpress:
-    image: wordpress:php8.4-fpm
+    image: wordpress:latest
     volumes:
       - wordpress-files:/var/www/html
     environment:
