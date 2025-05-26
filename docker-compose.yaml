@@ -16,6 +16,8 @@ services:
       - WORDPRESS_DB_NAME=wordpress
     depends_on:
       - mariadb
+    labels:
+      - "traefik.http.services.wordpress.loadbalancer.server.port=9000"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://127.0.0.1"]
       interval: 2s
