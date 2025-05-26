@@ -5,7 +5,7 @@
 
 services:
   wordpress:
-    image: wordpress:php8.4-fpm
+    image: wordpress:latest
     volumes:
       - wordpress-files:/var/www/html
     environment:
@@ -21,21 +21,6 @@ services:
       interval: 2s
       timeout: 10s
       retries: 10
-
-  nginx:
-    image: nginx:latest
-#    ports:
-#      - "80:80"
-    volumes:
-      - wordpress-files:/usr/share/nginx/html
-#      - ./nginx.conf:/etc/nginx/conf.d/default.conf
-    depends_on:
-      - wordpress
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
 
   mariadb:
     image: mariadb:11
@@ -64,8 +49,3 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-
-volumes:
-  wordpress-files:
-  mariadb-data:
-  redis-data:
