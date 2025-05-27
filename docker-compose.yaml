@@ -5,7 +5,7 @@
 
 services:
   wordpress:
-    image: bitnami/wordpress-nginx:latest
+    image: wordpress:php8.4-fpm
     volumes:
       - ./wordpress-files:/var/www/html
     environment:
@@ -16,6 +16,13 @@ services:
       - WORDPRESS_DB_NAME=wordpress
     depends_on:
       - mariadb
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.wordpress.rule=Host(`${SERVICE_FQDN_WORDPRESS}`)"
+      - "traefik.http.routers.wordpress.entrypoints=http,https"
+      - "traefik.http.routers.wordpress.tls=true"
+      - "traefik.http.routers.wordpress.tls.certresolver=myresolver"
+      - "traefik.http.services.wordpress.loadbalancer.server.port=9000"      
     healthcheck:
       test: ["CMD", "curl", "-f", "http://127.0.0.1"]
       interval: 2s
