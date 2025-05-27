@@ -6,8 +6,6 @@
 services:
   wordpress:
     image: bitnami/wordpress-nginx:latest
-        ports:
-      - "8080:8080"
     volumes:
       - ./wordpress-files:/var/www/html
     environment:
